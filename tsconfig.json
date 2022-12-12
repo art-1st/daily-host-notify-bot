@@ -24,7 +24,8 @@
   },
   "include": [
     "src/**/*.ts",
-    "serverless.ts"
+    "serverless.ts",
+    "environment.d.ts"
   ],
   "exclude": [
     "node_modules/**/*",
