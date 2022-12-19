@@ -34,7 +34,6 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
       NODE_OPTIONS: "--enable-source-maps --stack-trace-limit=1000",
-      AWS_REGION: "${env:AWS_REGION}",
       SLACK_INCOMING_WEBHOOK_ENDPOINT: "${env:SLACK_INCOMING_WEBHOOK_ENDPOINT}",
       JIRA_KANBAN_NAME: "${env:JIRA_KANBAN_NAME}",
       JIRA_KANBAN_URL: "${env:JIRA_KANBAN_URL}",
