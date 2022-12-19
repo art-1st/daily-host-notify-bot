@@ -11,9 +11,13 @@
     "node": ">=18.12.1"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.231.0",
+    "@aws-sdk/util-dynamodb": "^3.231.0",
     "@middy/core": "^4.0.3",
+    "@middy/do-not-wait-for-empty-event-loop": "^4.0.8",
     "@middy/http-json-body-parser": "^4.0.3",
     "@types/dotenv": "^8.2.0",
+    "dayjs": "^1.11.7",
     "dotenv": "^16.0.3",
     "got": "^12.5.3"
   },
