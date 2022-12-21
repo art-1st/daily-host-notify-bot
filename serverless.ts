@@ -2,7 +2,7 @@ require("dotenv").config();
 
 import type { AWS } from "@serverless/typescript";
 
-import { run } from "@functions/index";
+import { run, interactiveMessages } from "@functions/index";
 import { TABLES } from "src/constants";
 
 const serverlessConfiguration: AWS = {
@@ -34,7 +34,9 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
       NODE_OPTIONS: "--enable-source-maps --stack-trace-limit=1000",
-      SLACK_INCOMING_WEBHOOK_ENDPOINT: "${env:SLACK_INCOMING_WEBHOOK_ENDPOINT}",
+      SERVICE_NAME: "${self:service}",
+      SLACK_CHANNEL_ID: "${env:SLACK_CHANNEL_ID}",
+      SLACK_BOT_TOKEN: "${env:SLACK_BOT_TOKEN}",
       JIRA_KANBAN_NAME: "${env:JIRA_KANBAN_NAME}",
       JIRA_KANBAN_URL: "${env:JIRA_KANBAN_URL}",
     },
@@ -63,12 +65,18 @@ const serverlessConfiguration: AWS = {
             Resource:
               "arn:aws:dynamodb:${self:provider.region}:${env:AWS_ACCOUNT_ID}:table/${self:custom.tables.USER}",
           },
+          {
+            Effect: "Allow",
+            Action: ["lambda:InvokeFunction"],
+            Resource:
+              "arn:aws:lambda:${self:provider.region}:${env:AWS_ACCOUNT_ID}:function:*",
+          },
         ],
       },
     },
   },
   // import the function via paths
-  functions: { run },
+  functions: { run, interactiveMessages },
   resources: {
     Resources: {
       UserTable: {
