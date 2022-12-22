@@ -17,7 +17,6 @@
     "@middy/do-not-wait-for-empty-event-loop": "^4.0.8",
     "@middy/http-json-body-parser": "^4.0.3",
     "@slack/web-api": "^6.8.0",
-    "@slack/webhook": "^6.1.0",
     "@types/dotenv": "^8.2.0",
     "dayjs": "^1.11.7",
     "dotenv": "^16.0.3"
