@@ -7,6 +7,7 @@ import {
 } from "@libs/api-gateway";
 import dayjs from "dayjs";
 import { TABLES } from "src/constants";
+import { generateMessage } from "@libs/message";
 
 const {
   AWS_REGION,
@@ -52,72 +53,16 @@ const run: ValidatedEventAPIGatewayProxyEvent<any> = async (_event) => {
     // const todayHostNewHostDateWhenSkipped = dayjs(nextHost.last_host)
     //   .subtract(todayHostNewHostDateDifference / 2, "milliseconds")
     //   .toISOString();
-    const { ok } = await slackWeb.chat.postMessage({
-      channel: SLACK_CHANNEL_ID,
-      blocks: [
-        {
-          type: "header",
-          text: {
-            type: "plain_text",
-            text: ":loudspeaker: 데일리 스탠드업 진행자 공지",
-            emoji: true,
-          },
-        },
-        {
-          type: "divider",
-        },
-        {
-          type: "section",
-          text: {
-            type: "mrkdwn",
-            text: `오늘의 데일리 스탠드업 진행자는 <@${todayHost.id}>님입니다.`,
-          },
-        },
-        {
-          type: "section",
-          text: {
-            type: "mrkdwn",
-            text: `*진행자 역할*\n- <${JIRA_KANBAN_URL}|${JIRA_KANBAN_NAME}> 화면 공유\n- 스탠드업 진행`,
-          },
-        },
-        {
-          type: "divider",
-        },
-        {
-          type: "context",
-          elements: [
-            {
-              type: "mrkdwn",
-              text: `다음 스탠드업 진행자: \`${nextHost.real_name}\` 님`,
-            },
-          ],
-        },
-        {
-          type: "divider",
-        },
-        {
-          type: "actions",
-          elements: [
-            {
-              type: "button",
-              text: {
-                type: "plain_text",
-                text: "진행자 건너뛰기",
-                emoji: true,
-              },
-              value: JSON.stringify({
-                type: "skip_host",
-                payload: {
-                  todayHost,
-                  todayHostNewHostDate,
-                  // todayHostNewHostDateWhenSkipped,
-                },
-              }),
-            },
-          ],
-        },
-      ],
-    });
+    const { ok } = await slackWeb.chat.postMessage(
+      generateMessage({
+        channel: SLACK_CHANNEL_ID,
+        todayHost,
+        todayHostNewHostDate,
+        nextHost,
+        kanbanName: JIRA_KANBAN_NAME,
+        kanbanUrl: JIRA_KANBAN_URL,
+      })
+    );
 
     console.log("Webhook Success: ", ok);
 
