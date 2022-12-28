@@ -2,7 +2,7 @@ require("dotenv").config();
 
 import type { AWS } from "@serverless/typescript";
 
-import { run, interactiveMessages } from "@functions/index";
+import { run, interactiveMessages, command } from "@functions/index";
 import { TABLES } from "src/constants";
 
 const serverlessConfiguration: AWS = {
@@ -76,7 +76,7 @@ const serverlessConfiguration: AWS = {
     },
   },
   // import the function via paths
-  functions: { run, interactiveMessages },
+  functions: { run, interactiveMessages, command },
   resources: {
     Resources: {
       UserTable: {

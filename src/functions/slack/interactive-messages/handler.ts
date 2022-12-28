@@ -80,8 +80,16 @@ const interactiveMessages: ValidatedEventAPIGatewayProxyEvent<any> = async (
         }
 
         const host = unmarshall(Item);
+        const currentTime = +new Date();
+        const lastHostDate = new Date();
+        const lastHostOneHourAdded = +new Date(lastHostDate).setHours(
+          lastHostDate.getHours() + 1
+        );
 
-        if (host.last_host !== todayHostNewHostDate) {
+        if (
+          host.last_host !== todayHostNewHostDate || // last_host가 변경된 경우
+          currentTime > lastHostOneHourAdded // 요청 시각이 last_host +1시간보다 큰 경우
+        ) {
           throw new Error("Expired action");
         }
 
@@ -96,9 +104,26 @@ const interactiveMessages: ValidatedEventAPIGatewayProxyEvent<any> = async (
         const [{ $metadata: lambda_$metadata }, threadDeleteResult] =
           await Promise.all([
             lambdaClient.send(invokeCommand),
-            slackWeb.chat.delete({
+            slackWeb.chat.update({
               channel: channel_id,
               ts: message_ts,
+              blocks: [
+                {
+                  type: "header",
+                  text: {
+                    type: "plain_text",
+                    text: ":loudspeaker: 데일리 스탠드업 진행자 공지",
+                    emoji: true,
+                  },
+                },
+                {
+                  type: "section",
+                  text: {
+                    type: "mrkdwn",
+                    text: "_건너뜀_",
+                  },
+                },
+              ],
             }),
           ]);
 
