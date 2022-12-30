@@ -54,11 +54,9 @@ const command: ValidatedEventAPIGatewayProxyEvent<any> = async (event) => {
   }
 
   try {
-    const parsedResponsePayload = JSON.parse(
-      decodeURIComponent(slackResponsePayload)
-    );
+    const request = Object.fromEntries(new URLSearchParams(body));
 
-    console.log(parsedResponsePayload);
+    console.log(JSON.stringify(request));
 
     return formatJSONResponse(200, {});
   } catch (e: unknown) {
