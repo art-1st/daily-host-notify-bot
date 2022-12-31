@@ -1,27 +1,29 @@
-import { DynamoDB } from "@aws-sdk/client-dynamodb";
-import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import {
-  InvokeCommand,
-  InvokeCommandInput,
-  LambdaClient,
-} from "@aws-sdk/client-lambda";
+// import { DynamoDB } from "@aws-sdk/client-dynamodb";
+// import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
+// import {
+//   InvokeCommand,
+//   InvokeCommandInput,
+//   LambdaClient,
+// } from "@aws-sdk/client-lambda";
 import {
   formatJSONResponse,
   ValidatedEventAPIGatewayProxyEvent,
 } from "@libs/api-gateway";
+import { generateSlackBlockMessageResponse } from "@libs/message";
 import { WebClient } from "@slack/web-api";
-import { TABLES } from "src/constants";
+// import { TABLES } from "src/constants";
+import { CommandRequestPayload } from "src/types/command";
 
 const {
-  AWS_REGION,
+  // AWS_REGION,
   SERVICE_NAME,
   SLACK_BOT_TOKEN,
   JIRA_KANBAN_NAME,
   JIRA_KANBAN_URL,
 } = process.env;
 
-const lambdaClient = new LambdaClient({ region: AWS_REGION });
-const client = new DynamoDB({ region: AWS_REGION });
+// const lambdaClient = new LambdaClient({ region: AWS_REGION });
+// const client = new DynamoDB({ region: AWS_REGION });
 
 const command: ValidatedEventAPIGatewayProxyEvent<any> = async (event) => {
   const { body } = event;
@@ -54,11 +56,21 @@ const command: ValidatedEventAPIGatewayProxyEvent<any> = async (event) => {
   }
 
   try {
-    const request = Object.fromEntries(new URLSearchParams(body));
+    const payload = Object.fromEntries(
+      new URLSearchParams(body)
+    ) as unknown as CommandRequestPayload;
 
-    console.log(JSON.stringify(request));
-
-    return formatJSONResponse(200, {});
+    return generateSlackBlockMessageResponse(200, {
+      blocks: [
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: `Hello ${payload.text}.`,
+          },
+        },
+      ],
+    });
   } catch (e: unknown) {
     if (e instanceof Error) {
       console.log(e.name);

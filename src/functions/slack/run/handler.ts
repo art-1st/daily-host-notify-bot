@@ -7,7 +7,7 @@ import {
 } from "@libs/api-gateway";
 import dayjs from "dayjs";
 import { TABLES } from "src/constants";
-import { generateMessage } from "@libs/message";
+import { generateRunMessage } from "@functions/slack/run/helper/message";
 
 const {
   AWS_REGION,
@@ -54,7 +54,7 @@ const run: ValidatedEventAPIGatewayProxyEvent<any> = async (_event) => {
     //   .subtract(todayHostNewHostDateDifference / 2, "milliseconds")
     //   .toISOString();
     const { ok } = await slackWeb.chat.postMessage(
-      generateMessage({
+      generateRunMessage({
         channel: SLACK_CHANNEL_ID,
         todayHost,
         todayHostNewHostDate,

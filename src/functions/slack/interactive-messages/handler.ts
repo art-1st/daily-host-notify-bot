@@ -147,7 +147,10 @@ const interactiveMessages: ValidatedEventAPIGatewayProxyEvent<any> = async (
 
         // console.log($metadata);
 
-        return formatJSONResponse(200, {});
+        return formatJSONResponse(200, {
+          run: lambda_$metadata,
+          delete: threadDeleteResult,
+        });
       }
       default:
         throw new Error("Unknown action type");
