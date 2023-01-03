@@ -71,6 +71,18 @@ const serverlessConfiguration: AWS = {
             Resource:
               "arn:aws:lambda:${self:provider.region}:${env:AWS_ACCOUNT_ID}:function:*",
           },
+          {
+            Effect: "Allow",
+            Action: [
+              "events:DescribeRule",
+              "events:EnableRule",
+              "events:PutRule",
+              "events:ListRules",
+              "events:DisableRule",
+            ],
+            Resource:
+              "arn:aws:events:${self:provider.region}:${env:AWS_ACCOUNT_ID}:rule/[*/]*",
+          },
         ],
       },
     },
