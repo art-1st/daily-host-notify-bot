@@ -6,7 +6,7 @@ import { run, interactiveMessages, command } from "@functions/index";
 import { TABLES } from "src/constants";
 
 const serverlessConfiguration: AWS = {
-  service: "host-rotation-bot",
+  service: "${env:SERVICE_NAME}",
   frameworkVersion: "3",
   useDotenv: true,
   custom: {
