@@ -39,6 +39,7 @@ const serverlessConfiguration: AWS = {
       SLACK_BOT_TOKEN: "${env:SLACK_BOT_TOKEN}",
       JIRA_KANBAN_NAME: "${env:JIRA_KANBAN_NAME}",
       JIRA_KANBAN_URL: "${env:JIRA_KANBAN_URL}",
+      DDB_TABLE_NAME_USERS: "${env:DDB_TABLE_NAME_USERS}",
     },
     iam: {
       role: {
@@ -111,7 +112,7 @@ const serverlessConfiguration: AWS = {
             ReadCapacityUnits: 1,
             WriteCapacityUnits: 1,
           },
-          TableName: "${self:custom.tables.USER}",
+          TableName: "${env:DDB_TABLE_NAME_USERS}",
         },
       },
     },
