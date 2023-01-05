@@ -55,6 +55,12 @@ const serverlessConfiguration: AWS = {
         Resource:
           "arn:aws:dynamodb:${self:provider.region}:${env:AWS_ACCOUNT_ID}:table/${env:DDB_TABLE_NAME_USERS}",
       },
+      {
+        Effect: "Allow",
+        Action: ["dynamodb:Query", "dynamodb:Scan"],
+        Resource:
+          "arn:aws:dynamodb:${self:provider.region}:${env:AWS_ACCOUNT_ID}:table/${env:DDB_TABLE_NAME_USERS}/index/*",
+      },
     ],
     iam: {
       role: {
