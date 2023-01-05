@@ -41,6 +41,21 @@ const serverlessConfiguration: AWS = {
       JIRA_KANBAN_URL: "${env:JIRA_KANBAN_URL}",
       DDB_TABLE_NAME_USERS: "${env:DDB_TABLE_NAME_USERS}",
     },
+    iamRoleStatements: [
+      {
+        Effect: "Allow",
+        Action: [
+          "dynamodb:Query",
+          "dynamodb:Scan",
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "dynamodb:UpdateItem",
+          "dynamodb:DeleteItem",
+        ],
+        Resource:
+          "arn:aws:dynamodb:${self:provider.region}:${env:AWS_ACCOUNT_ID}:table/${env:DDB_TABLE_NAME_USERS}",
+      },
+    ],
     iam: {
       role: {
         statements: [
@@ -64,7 +79,7 @@ const serverlessConfiguration: AWS = {
               "dynamodb:DeleteItem",
             ],
             Resource:
-              "arn:aws:dynamodb:${self:provider.region}:${env:AWS_ACCOUNT_ID}:table/${self:custom.tables.USER}",
+              "arn:aws:dynamodb:${self:provider.region}:${env:AWS_ACCOUNT_ID}:table/${env:DDB_TABLE_NAME_USERS}",
           },
           {
             Effect: "Allow",
