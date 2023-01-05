@@ -53,7 +53,7 @@ const serverlessConfiguration: AWS = {
           "dynamodb:DeleteItem",
         ],
         Resource:
-          "arn:aws:lambda:${self:provider.region}:${env:AWS_ACCOUNT_ID}:*",
+          "arn:aws:lambda:${self:provider.region}:${env:AWS_ACCOUNT_ID}:function:*",
       },
     ],
     iam: {
@@ -83,15 +83,7 @@ const serverlessConfiguration: AWS = {
           },
           {
             Effect: "Allow",
-            Action: [
-              "dynamodb:Query",
-              "dynamodb:Scan",
-              "dynamodb:GetItem",
-              "dynamodb:PutItem",
-              "dynamodb:UpdateItem",
-              "dynamodb:DeleteItem",
-              "lambda:InvokeFunction",
-            ],
+            Action: ["lambda:InvokeFunction"],
             Resource:
               "arn:aws:lambda:${self:provider.region}:${env:AWS_ACCOUNT_ID}:function:*",
           },
