@@ -83,7 +83,15 @@ const serverlessConfiguration: AWS = {
           },
           {
             Effect: "Allow",
-            Action: ["lambda:InvokeFunction"],
+            Action: [
+              "dynamodb:Query",
+              "dynamodb:Scan",
+              "dynamodb:GetItem",
+              "dynamodb:PutItem",
+              "dynamodb:UpdateItem",
+              "dynamodb:DeleteItem",
+              "lambda:InvokeFunction",
+            ],
             Resource:
               "arn:aws:lambda:${self:provider.region}:${env:AWS_ACCOUNT_ID}:function:*",
           },
