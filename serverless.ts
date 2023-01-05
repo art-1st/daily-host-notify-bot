@@ -53,13 +53,7 @@ const serverlessConfiguration: AWS = {
           "dynamodb:DeleteItem",
         ],
         Resource:
-          "arn:aws:dynamodb:${self:provider.region}:${env:AWS_ACCOUNT_ID}:table/${env:DDB_TABLE_NAME_USERS}",
-      },
-      {
-        Effect: "Allow",
-        Action: ["dynamodb:Query", "dynamodb:Scan"],
-        Resource:
-          "arn:aws:dynamodb:${self:provider.region}:${env:AWS_ACCOUNT_ID}:table/${env:DDB_TABLE_NAME_USERS}/index/*",
+          "arn:aws:lambda:${self:provider.region}:${env:AWS_ACCOUNT_ID}:*",
       },
     ],
     iam: {
