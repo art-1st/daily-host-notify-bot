@@ -13,6 +13,7 @@ const {
   AWS_REGION,
   SLACK_CHANNEL_ID,
   SLACK_BOT_TOKEN,
+  GOOGLE_MEET_URL,
   JIRA_KANBAN_NAME,
   JIRA_KANBAN_URL,
 } = process.env;
@@ -22,6 +23,7 @@ const run: ValidatedEventAPIGatewayProxyEvent<any> = async (_event) => {
   if (
     !SLACK_CHANNEL_ID ||
     !SLACK_BOT_TOKEN ||
+    !GOOGLE_MEET_URL ||
     !JIRA_KANBAN_NAME ||
     !JIRA_KANBAN_URL
   ) {
@@ -59,6 +61,7 @@ const run: ValidatedEventAPIGatewayProxyEvent<any> = async (_event) => {
         todayHost,
         todayHostNewHostDate,
         nextHost,
+        googleMeetUrl: GOOGLE_MEET_URL,
         kanbanName: JIRA_KANBAN_NAME,
         kanbanUrl: JIRA_KANBAN_URL,
       })

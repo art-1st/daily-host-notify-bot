@@ -37,6 +37,7 @@ const serverlessConfiguration: AWS = {
       SERVICE_NAME: "${self:service}",
       SLACK_CHANNEL_ID: "${env:SLACK_CHANNEL_ID}",
       SLACK_BOT_TOKEN: "${env:SLACK_BOT_TOKEN}",
+      GOOGLE_MEET_URL: "${env:GOOGLE_MEET_URL}",
       JIRA_KANBAN_NAME: "${env:JIRA_KANBAN_NAME}",
       JIRA_KANBAN_URL: "${env:JIRA_KANBAN_URL}",
       DDB_TABLE_NAME_USERS: "${env:DDB_TABLE_NAME_USERS}",

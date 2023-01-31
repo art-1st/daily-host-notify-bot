@@ -18,6 +18,7 @@ const {
   // AWS_REGION,
   SERVICE_NAME,
   SLACK_BOT_TOKEN,
+  GOOGLE_MEET_URL,
   JIRA_KANBAN_NAME,
   JIRA_KANBAN_URL,
 } = process.env;
@@ -31,6 +32,7 @@ const command: ValidatedEventAPIGatewayProxyEvent<any> = async (event) => {
   if (
     !SERVICE_NAME ||
     !SLACK_BOT_TOKEN ||
+    !GOOGLE_MEET_URL ||
     !JIRA_KANBAN_NAME ||
     !JIRA_KANBAN_URL
   ) {

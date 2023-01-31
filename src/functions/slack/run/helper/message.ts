@@ -5,6 +5,7 @@ interface MessageProps {
   todayHost: Record<string, any>;
   todayHostNewHostDate: string;
   nextHost: Record<string, any>;
+  googleMeetUrl: string;
   kanbanName: string;
   kanbanUrl: string;
 }
@@ -14,6 +15,7 @@ export function generateRunMessage({
   todayHost,
   todayHostNewHostDate,
   nextHost,
+  googleMeetUrl,
   kanbanName,
   kanbanUrl,
 }: MessageProps): ChatPostMessageArguments {
@@ -63,6 +65,17 @@ export function generateRunMessage({
       {
         type: "actions",
         elements: [
+          {
+            type: "button",
+            text: {
+              type: "plain_text",
+              text: ":googlecalendar: Google Meet 참여",
+              emoji: true,
+            },
+            style: "primary",
+            url: googleMeetUrl,
+            value: "join_meet",
+          },
           {
             type: "button",
             text: {
