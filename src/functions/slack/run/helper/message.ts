@@ -74,7 +74,6 @@ export function generateRunMessage({
             },
             style: "primary",
             url: googleMeetUrl,
-            value: "join_meet",
           },
           {
             type: "button",
