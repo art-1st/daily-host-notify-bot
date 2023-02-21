@@ -9,18 +9,18 @@ import {
   formatJSONResponse,
   ValidatedEventAPIGatewayProxyEvent,
 } from "@libs/api-gateway";
-import { generateSlackBlockMessageResponse } from "@libs/message";
 // import { WebClient } from "@slack/web-api";
 // import { TABLES } from "src/constants";
-import { CommandRequestPayload } from "src/types/command";
+import { CommandItem, CommandRequestPayload } from "src/types/command";
+import { commandSetup } from "./commands/setup";
+import { commandShowInfo } from "./commands/info";
+import { commandAddUser } from "./commands/user-add";
+import { commandRemoveUser } from "./commands/user-remove";
 
 const {
   // AWS_REGION,
   SERVICE_NAME,
   SLACK_BOT_TOKEN,
-  GOOGLE_MEET_URL,
-  JIRA_KANBAN_NAME,
-  JIRA_KANBAN_URL,
 } = process.env;
 
 // const lambdaClient = new LambdaClient({ region: AWS_REGION });
@@ -29,13 +29,7 @@ const {
 const command: ValidatedEventAPIGatewayProxyEvent<any> = async (event) => {
   const { body } = event;
 
-  if (
-    !SERVICE_NAME ||
-    !SLACK_BOT_TOKEN ||
-    !GOOGLE_MEET_URL ||
-    !JIRA_KANBAN_NAME ||
-    !JIRA_KANBAN_URL
-  ) {
+  if (!SERVICE_NAME || !SLACK_BOT_TOKEN) {
     return formatJSONResponse(500, {
       message: "Internal Server Error",
     });
@@ -62,17 +56,22 @@ const command: ValidatedEventAPIGatewayProxyEvent<any> = async (event) => {
       new URLSearchParams(body)
     ) as unknown as CommandRequestPayload;
 
-    return generateSlackBlockMessageResponse(200, {
-      blocks: [
-        {
-          type: "section",
-          text: {
-            type: "mrkdwn",
-            text: `Hello ${payload.text}.`,
-          },
-        },
-      ],
-    });
+    console.log("[COMMAND]", payload.command);
+
+    switch (payload.command) {
+      case CommandItem.SETUP:
+        return await commandSetup(payload);
+      case CommandItem.INFO:
+        return await commandShowInfo(payload);
+      case CommandItem.USER_ADD:
+        return await commandAddUser(payload);
+      case CommandItem.USER_REMOVE:
+        return await commandRemoveUser(payload);
+      default:
+        return formatJSONResponse(400, {
+          message: "Unknown command.",
+        });
+    }
   } catch (e: unknown) {
     if (e instanceof Error) {
       console.log(e.name);

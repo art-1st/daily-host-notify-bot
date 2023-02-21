@@ -8,12 +8,8 @@ on:
 env:
   SERVICE_NAME: ${{ secrets.SERVICE_NAME }}
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-  SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
   SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-  GOOGLE_MEET_URL: ${{ secrets.GOOGLE_MEET_URL }}
-  JIRA_KANBAN_NAME: ${{ secrets.JIRA_KANBAN_NAME }}
-  JIRA_KANBAN_URL: ${{ secrets.JIRA_KANBAN_URL }}
-  DDB_TABLE_NAME_USERS: ${{ secrets.DDB_TABLE_NAME_USERS }}
+  DDB_TABLE_NAME: ${{ secrets.DDB_TABLE_NAME }}
 
 jobs:
   deploy:

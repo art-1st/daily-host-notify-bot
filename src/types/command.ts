@@ -13,3 +13,10 @@ export interface CommandRequestPayload {
   response_url: string;
   trigger_id: string;
 }
+
+export enum CommandItem {
+  SETUP = "/setup",
+  INFO = "/info",
+  USER_ADD = "/user-add",
+  USER_REMOVE = "/user-remove",
+}

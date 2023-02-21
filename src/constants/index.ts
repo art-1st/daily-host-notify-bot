@@ -1,3 +1,3 @@
 export const TABLES = {
-  USER: process.env.DDB_TABLE_NAME_USERS,
+  TABLE: process.env.DDB_TABLE_NAME,
 };

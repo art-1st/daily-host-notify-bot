@@ -5,11 +5,9 @@ declare global {
     interface ProcessEnv {
       AWS_REGION?: string;
       SERVICE_NAME?: string;
-      SLACK_CHANNEL_ID?: string;
+      AWS_ACCOUNT_ID?: string;
       SLACK_BOT_TOKEN?: string;
-      GOOGLE_MEET_URL?: string;
-      JIRA_KANBAN_NAME?: string;
-      JIRA_KANBAN_URL?: string;
+      DDB_TABLE_NAME?: string;
     }
   }
 }

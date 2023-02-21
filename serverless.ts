@@ -22,7 +22,7 @@ const serverlessConfiguration: AWS = {
       concurrency: 10,
     },
   },
-  plugins: ["serverless-esbuild"],
+  plugins: ["serverless-esbuild", "serverless-offline"],
   provider: {
     name: "aws",
     runtime: "nodejs18.x",
@@ -35,34 +35,21 @@ const serverlessConfiguration: AWS = {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
       NODE_OPTIONS: "--enable-source-maps --stack-trace-limit=1000",
       SERVICE_NAME: "${self:service}",
-      SLACK_CHANNEL_ID: "${env:SLACK_CHANNEL_ID}",
       SLACK_BOT_TOKEN: "${env:SLACK_BOT_TOKEN}",
-      GOOGLE_MEET_URL: "${env:GOOGLE_MEET_URL}",
-      JIRA_KANBAN_NAME: "${env:JIRA_KANBAN_NAME}",
-      JIRA_KANBAN_URL: "${env:JIRA_KANBAN_URL}",
-      DDB_TABLE_NAME_USERS: "${env:DDB_TABLE_NAME_USERS}",
+      DDB_TABLE_NAME: "${env:DDB_TABLE_NAME}",
     },
-    iamRoleStatements: [
-      {
-        Effect: "Allow",
-        Action: [
-          "dynamodb:Query",
-          "dynamodb:Scan",
-          "dynamodb:GetItem",
-          "dynamodb:PutItem",
-          "dynamodb:UpdateItem",
-          "dynamodb:DeleteItem",
-        ],
-        Resource:
-          "arn:aws:lambda:${self:provider.region}:${env:AWS_ACCOUNT_ID}:function:*",
-      },
-    ],
     iam: {
       role: {
         statements: [
           {
             Effect: "Allow",
             Action: [
+              "events:DeleteRule",
+              "events:PutRule",
+              "events:ListTargetsByRule",
+              "events:RemoveTargets",
+              "events:PutTargets",
+              "lambda:GetFunction",
               "logs:CreateLogGroup",
               "logs:CreateLogStream",
               "logs:PutLogEvents",
@@ -80,11 +67,20 @@ const serverlessConfiguration: AWS = {
               "dynamodb:DeleteItem",
             ],
             Resource:
-              "arn:aws:dynamodb:${self:provider.region}:${env:AWS_ACCOUNT_ID}:table/${env:DDB_TABLE_NAME_USERS}",
+              "arn:aws:dynamodb:${self:provider.region}:${env:AWS_ACCOUNT_ID}:table/${env:DDB_TABLE_NAME}",
           },
           {
             Effect: "Allow",
-            Action: ["lambda:InvokeFunction"],
+            Action: [
+              "dynamodb:Query",
+              "dynamodb:Scan",
+              "dynamodb:GetItem",
+              "dynamodb:PutItem",
+              "dynamodb:UpdateItem",
+              "dynamodb:DeleteItem",
+              "lambda:AddPermission",
+              "lambda:InvokeFunction",
+            ],
             Resource:
               "arn:aws:lambda:${self:provider.region}:${env:AWS_ACCOUNT_ID}:function:*",
           },
@@ -96,18 +92,18 @@ const serverlessConfiguration: AWS = {
   functions: { run, interactiveMessages, command },
   resources: {
     Resources: {
-      UserTable: {
+      DynamoDBTable: {
         Type: "AWS::DynamoDB::Table",
         Properties: {
           AttributeDefinitions: [
             {
-              AttributeName: "id",
+              AttributeName: "channel_id",
               AttributeType: "S",
             },
           ],
           KeySchema: [
             {
-              AttributeName: "id",
+              AttributeName: "channel_id",
               KeyType: "HASH",
             },
           ],
@@ -116,7 +112,7 @@ const serverlessConfiguration: AWS = {
             ReadCapacityUnits: 1,
             WriteCapacityUnits: 1,
           },
-          TableName: "${env:DDB_TABLE_NAME_USERS}",
+          TableName: "${env:DDB_TABLE_NAME}",
         },
       },
     },
