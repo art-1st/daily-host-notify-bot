@@ -108,21 +108,34 @@ export async function interactiveMessageDialogSubmissionResolver(
         FunctionName: `${SERVICE_NAME}-dev-run`,
       })
     );
+    console.info(
+      "GET LAMBDA FUNCTION SUCCESS",
+      getRunFunctionResponse.$metadata
+    );
     const runFunctionArn = getRunFunctionResponse.Configuration?.FunctionArn;
     if (!runFunctionArn) {
       throw new Error("CANNOT GET RUN FUNCTION ARN");
     }
 
     // 이벤트 룰에 Lambda Invoke Permission 추가
-    const addLambdaInvokePermissionResponse = await lambdaClient.send(
-      new AddPermissionCommand({
-        FunctionName: `${SERVICE_NAME}-dev-run`,
-        StatementId: `Scheduled-Event-${payload.channel.id}`,
-        Action: "lambda:InvokeFunction",
-        Principal: "events.amazonaws.com",
-        SourceArn: putRuleResponse.RuleArn,
-      })
-    );
+    try {
+      const addLambdaInvokePermissionResponse = await lambdaClient.send(
+        new AddPermissionCommand({
+          FunctionName: `${SERVICE_NAME}-dev-run`,
+          StatementId: `Scheduled-Event-${payload.channel.id}`,
+          Action: "lambda:InvokeFunction",
+          Principal: "events.amazonaws.com",
+          SourceArn: putRuleResponse.RuleArn,
+        })
+      );
+      console.info(
+        "ADD LAMBDA PERMISSION SUCCESS",
+        addLambdaInvokePermissionResponse.$metadata,
+        addLambdaInvokePermissionResponse.Statement
+      );
+    } catch (e) {
+      console.warn("ADD LAMBDA PERMISSION FAILED");
+    }
 
     // 신규 이벤트에 Run 함수 타겟 설정
     const putTargetsResponse = await cloudwatchEventsClient.send(
