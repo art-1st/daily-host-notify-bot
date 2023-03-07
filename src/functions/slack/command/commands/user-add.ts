@@ -63,6 +63,7 @@ export async function commandAddUser(payload: CommandRequestPayload) {
     });
 
     return generateSlackBlockMessageResponse(200, {
+      response_type: "in_channel",
       blocks: [
         {
           type: "section",
@@ -77,6 +78,7 @@ export async function commandAddUser(payload: CommandRequestPayload) {
   } catch (e) {
     if (e instanceof CommandError) {
       return generateSlackBlockMessageResponse(200, {
+        response_type: "ephemeral",
         blocks: [
           {
             type: "section",

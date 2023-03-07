@@ -37,8 +37,9 @@ const interactiveMessages: ValidatedEventAPIGatewayProxyEvent<any> = async (
   }
 
   try {
+    console.info("[RAW PAYLOAD]", slackResponsePayload);
     const payload = JSON.parse(
-      decodeURIComponent(slackResponsePayload)
+      decodeURIComponent(slackResponsePayload).replace(/\+/g, " ")
     ) as SlackInteractiveMessageCommonPayload;
 
     switch (payload.type) {

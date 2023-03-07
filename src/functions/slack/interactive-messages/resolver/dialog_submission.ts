@@ -27,8 +27,8 @@ const { SERVICE_NAME } = process.env;
 type SetupPayloadSubmission = {
   header: string;
   content: string;
-  googlemeet_link: string;
   notification_time: string;
+  googlemeet_link: string | null;
 };
 
 type SetupPayloadState = "modify" | "create";
@@ -187,6 +187,7 @@ export async function interactiveMessageDialogSubmissionResolver(
   } catch (e) {
     if (e instanceof CommandError) {
       return generateSlackBlockMessageResponse(200, {
+        response_type: "ephemeral",
         blocks: [
           {
             type: "section",

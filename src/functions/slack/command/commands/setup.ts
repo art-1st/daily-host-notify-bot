@@ -37,14 +37,9 @@ export async function commandSetup(payload: CommandRequestPayload) {
             name: "content",
           },
           {
-            type: "text",
-            label: "Google Meet 링크 (선택)",
-            name: "googlemeet_link",
-            placeholder: "https://meet.google.com/",
-          },
-          {
             type: "select",
-            label: "메시지 전송 시간 (UTC+09:00/월-금)",
+            label: "메시지 전송 시간",
+            hint: "UTC+09:00 기준, 월요일-금요일",
             name: "notification_time",
             options: [
               {
@@ -117,25 +112,23 @@ export async function commandSetup(payload: CommandRequestPayload) {
               },
             ],
           },
+          {
+            type: "text",
+            label: "Google Meet 링크",
+            name: "googlemeet_link",
+            subtype: "url",
+            placeholder: "https://meet.google.com/",
+            optional: true,
+          },
         ],
       },
     });
 
-    return generateSlackBlockMessageResponse(200, {
-      blocks: [
-        {
-          type: "section",
-          text: {
-            type: "plain_text",
-            text: "다이얼로그에서 계속 진행해주세요.",
-            emoji: true,
-          },
-        },
-      ],
-    });
+    return generateSlackBlockMessageResponse(200);
   } catch (e) {
     if (e instanceof CommandError) {
       return generateSlackBlockMessageResponse(200, {
+        response_type: "ephemeral",
         blocks: [
           {
             type: "section",

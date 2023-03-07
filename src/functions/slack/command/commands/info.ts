@@ -31,7 +31,7 @@ export async function commandShowInfo(payload: CommandRequestPayload) {
     const membersText = users.map((user) => `<@${user}>`).join("\n");
 
     return generateSlackBlockMessageResponse(200, {
-      // response_type: "in_channel",
+      response_type: "in_channel",
       blocks: [
         {
           type: "section",
@@ -56,6 +56,7 @@ export async function commandShowInfo(payload: CommandRequestPayload) {
   } catch (e) {
     if (e instanceof CommandError) {
       return generateSlackBlockMessageResponse(200, {
+        response_type: "ephemeral",
         blocks: [
           {
             type: "section",
