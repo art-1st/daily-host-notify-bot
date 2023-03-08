@@ -1,4 +1,9 @@
-import { ChatPostMessageArguments } from "@slack/web-api";
+import {
+  ActionsBlock,
+  Block,
+  ChatPostMessageArguments,
+  KnownBlock,
+} from "@slack/web-api";
 
 interface MessageProps {
   channel_id: string;
@@ -17,7 +22,10 @@ export function generateRunMessage({
   content_text,
   googlemeet_link,
 }: MessageProps): ChatPostMessageArguments {
-  return {
+  const messageObject: {
+    channel: string;
+    blocks: KnownBlock[];
+  } = {
     channel: channel_id,
     blocks: [
       {
@@ -67,16 +75,6 @@ export function generateRunMessage({
             type: "button",
             text: {
               type: "plain_text",
-              text: ":googlecalendar: Google Meet 참여",
-              emoji: true,
-            },
-            style: "primary",
-            url: googlemeet_link,
-          },
-          {
-            type: "button",
-            text: {
-              type: "plain_text",
               text: "진행자 건너뛰기",
               emoji: true,
             },
@@ -108,4 +106,20 @@ export function generateRunMessage({
       },
     ],
   };
+
+  if (googlemeet_link) {
+    const actionBlock = messageObject.blocks.at(-1) as ActionsBlock;
+    actionBlock.elements.unshift({
+      type: "button",
+      text: {
+        type: "plain_text",
+        text: ":googlecalendar: Google Meet 참여",
+        emoji: true,
+      },
+      style: "primary",
+      url: googlemeet_link,
+    });
+  }
+
+  return messageObject;
 }
