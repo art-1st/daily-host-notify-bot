@@ -5,6 +5,7 @@ export enum CommandErrorName {
   COMMON_SLACK_USER_NOT_FOUND = "COMMON_SLACK_USER_NOT_FOUND",
   COMMON_NOT_FOUND_USER = "COMMON_NOT_FOUND_USER",
   COMMON_USER_DATA_BROKEN = "COMMON_USER_DATA_BROKEN",
+  COMMON_RULE_ARN_BROKEN = "COMMON_RULE_ARN_BROKEN",
   SET_USER_ALREADY_EXISTS = "SET_USER_ALREADY_EXISTS",
   SET_USER_NOT_EXISTS = "SET_USER_NOT_EXISTS",
 }
@@ -30,6 +31,8 @@ export default class CommandError extends Error {
         return "사용자를 찾을 수 없습니다.";
       case CommandErrorName.COMMON_USER_DATA_BROKEN:
         return "채널 사용자 정보 오류";
+      case CommandErrorName.COMMON_RULE_ARN_BROKEN:
+        return "CloudWatch Event를 찾을 수 없습니다. 관리자에게 문의해주세요.";
       case CommandErrorName.SET_USER_ALREADY_EXISTS:
         return "채널에 이미 등록된 사용자입니다.";
       case CommandErrorName.SET_USER_NOT_EXISTS:

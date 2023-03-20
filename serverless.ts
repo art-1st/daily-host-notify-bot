@@ -45,6 +45,7 @@ const serverlessConfiguration: AWS = {
             Effect: "Allow",
             Action: [
               "events:DeleteRule",
+              "events:DescribeRule",
               "events:PutRule",
               "events:ListTargetsByRule",
               "events:RemoveTargets",

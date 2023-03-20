@@ -3,6 +3,7 @@ import {
   ValidatedEventAPIGatewayProxyEvent,
 } from "@libs/api-gateway";
 import { interactiveMessageDialogSubmissionResolver } from "./resolver/dialog_submission";
+import { interactiveMessageSetupSubmissionResolver } from "./resolver/setup_submission";
 
 const { SERVICE_NAME, SLACK_BOT_TOKEN } = process.env;
 
@@ -45,7 +46,8 @@ const interactiveMessages: ValidatedEventAPIGatewayProxyEvent<any> = async (
     switch (payload.type) {
       case "dialog_submission":
         return await interactiveMessageDialogSubmissionResolver(payload);
-      // case "skip_host":
+      case "setup":
+        return await interactiveMessageSetupSubmissionResolver(payload);
       // break;
       default:
         throw new Error("Unknown action type");
